@@ -1,0 +1,24 @@
+database:
+  # Storage backend: sqlite, mysql, or mariadb
+  type: sqlite
+
+  # MySQL/MariaDB settings (ignored when using sqlite)
+  host: localhost
+  port: 3306
+  database: personalshulkers
+  username: root
+  password: ""
+  pool-size: 10
+
+allowedRegions:
+  - region1
+  - region2
+
+# if set to player it will check if the player is inside any of the regions specified above upon placing the shulker box
+# if set to block it will check if the block placed is inside any of the regions above upon placing the shulker box
+regionCheck: block
+
+messages:
+  breakMessage: "<bold><green>This shulker does not belong to you!</green></bold>"
+  openMessage: "<bold><green>This shulker does not belong to you!</green></bold>"
+  noPermission: "<bold><red>You do not have permission to use this command!</red></bold>"

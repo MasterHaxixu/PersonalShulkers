@@ -1,0 +1,21 @@
+name: PersonalShulkers
+version: 0.3
+main: com.masterhaxixu.Main
+api-version: 1.21
+commands:
+  clearshulkerdata:
+    description: Clears All saved player data
+    usage: /clearshulkerdata
+    default: op
+    permission: personalshulkers.clear
+permissions:
+  personalshulkers.bypass:
+    description: Bypasses shulker box protection
+    default: op
+  personalshulkers.clear:
+    description: Clears player data
+    default: op
+libraries:
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.22.0
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.22.0
+  - org.xerial:sqlite-jdbc:3.51.3.0
