@@ -6,7 +6,7 @@
 
     <groupId>com.masterhaxixu</groupId>
     <artifactId>PersonalShulkers</artifactId>
-    <version>0.3</version>
+    <version>0.3.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -102,6 +102,10 @@
                                     <pattern>dev.faststats</pattern>
                                     <shadedPattern>com.masterhaxixu.libs.faststats</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>kotlinx.coroutines</pattern>
+                                    <shadedPattern>com.masterhaxixu.libs.coroutines</shadedPattern>
+                                </relocation>
                             </relocations>
                             <filters>
                                 <filter>
@@ -153,6 +157,7 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>2.2.20</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -186,7 +191,7 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>9.2.0</version>
+            <version>9.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
@@ -197,6 +202,7 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.26.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.shynixn.mccoroutine</groupId>

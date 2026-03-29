@@ -1,5 +1,5 @@
 name: PersonalShulkers
-version: 0.3
+version: 0.3.1
 main: com.masterhaxixu.Main
 api-version: 1.21
 commands:

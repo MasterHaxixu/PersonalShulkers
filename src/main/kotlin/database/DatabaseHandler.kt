@@ -29,11 +29,13 @@ class DatabaseHandler(private val plugin: Main) {
                 val username = plugin.config.getString("database.username", "root")
                 val password = plugin.config.getString("database.password", "")
                 hikariConfig.driverClassName = "com.mysql.cj.jdbc.Driver"
-                hikariConfig.jdbcUrl = "jdbc:mysql://$host:$port/$database?useSSL=false&autoReconnect=true&characterEncoding=utf8"
+                hikariConfig.jdbcUrl =
+                    "jdbc:mysql://$host:$port/$database?useSSL=false&autoReconnect=true&characterEncoding=utf8"
                 hikariConfig.username = username
                 hikariConfig.password = password
                 hikariConfig.maximumPoolSize = plugin.config.getInt("database.pool-size", 10)
             }
+
             "mariadb" -> {
                 val host = plugin.config.getString("database.host", "localhost")
                 val port = plugin.config.getInt("database.port", 3306)
@@ -46,6 +48,7 @@ class DatabaseHandler(private val plugin: Main) {
                 hikariConfig.password = password
                 hikariConfig.maximumPoolSize = plugin.config.getInt("database.pool-size", 10)
             }
+
             else -> {
                 dbType = "sqlite"
                 val dbFile = File(plugin.dataFolder, "shulkers.db")
@@ -116,12 +119,13 @@ class DatabaseHandler(private val plugin: Main) {
         cache.add(uniqueShulkerKey)
         withContext(Dispatchers.IO) {
             dataSource.connection.use { conn ->
-                conn.prepareStatement("INSERT INTO shulkers (unique_shulker_key, owner_uuid, createdAt) VALUES (?, ?, ?)").use { stmt ->
-                    stmt.setString(1, uniqueShulkerKey)
-                    stmt.setString(2, ownerUuid)
-                    stmt.setLong(3, System.currentTimeMillis())
-                    stmt.executeUpdate()
-                }
+                conn.prepareStatement("INSERT INTO shulkers (unique_shulker_key, owner_uuid, createdAt) VALUES (?, ?, ?)")
+                    .use { stmt ->
+                        stmt.setString(1, uniqueShulkerKey)
+                        stmt.setString(2, ownerUuid)
+                        stmt.setLong(3, System.currentTimeMillis())
+                        stmt.executeUpdate()
+                    }
             }
         }
     }

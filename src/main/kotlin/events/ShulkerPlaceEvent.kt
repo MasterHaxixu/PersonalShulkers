@@ -1,8 +1,8 @@
 package com.masterhaxixu.events
 
 import com.masterhaxixu.Main
+import com.masterhaxixu.util.isInRegion
 import org.bukkit.Location
-import org.bukkit.NamespacedKey
 import org.bukkit.Tag
 import org.bukkit.block.ShulkerBox
 import org.bukkit.event.EventHandler
@@ -15,24 +15,22 @@ class ShulkerPlaceEvent(private val plugin: Main) : Listener {
 
     @EventHandler
     private suspend fun onPlaceEvent(event: BlockPlaceEvent) {
-        if(Tag.SHULKER_BOXES.isTagged(event.block.type)) {
+        if (Tag.SHULKER_BOXES.isTagged(event.block.type)) {
             val regionCheck: String? = plugin.config.getString("regionCheck")
-            val location: Location = if(regionCheck == "player") event.player.location
+            val location: Location = if (regionCheck == "player") event.player.location
             else event.block.location
-            if(plugin.regionUtils.isInRegion(location)) {
+            if (location.isInRegion(plugin.config.getStringList("allowedRegions"))) {
                 val shulker: ShulkerBox = event.block.state as ShulkerBox
-                val uuidKey = NamespacedKey(plugin, "personalshulkers_owner_uuid")
-                val uniqueKey = NamespacedKey(plugin, "personalshulkers_unique_shulker_key")
                 val uniqueShulkerKey = UUID.randomUUID().toString()
 
                 shulker.persistentDataContainer.set(
-                    uuidKey,
+                    plugin.keys.ownerKey,
                     PersistentDataType.STRING,
                     event.player.uniqueId.toString()
                 )
 
                 shulker.persistentDataContainer.set(
-                    uniqueKey,
+                    plugin.keys.uniqueKey,
                     PersistentDataType.STRING,
                     uniqueShulkerKey
                 )

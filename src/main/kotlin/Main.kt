@@ -8,8 +8,7 @@ import com.masterhaxixu.database.DatabaseHandler
 import com.masterhaxixu.events.ShulkerBreakEvent
 import com.masterhaxixu.events.ShulkerOpenEvent
 import com.masterhaxixu.events.ShulkerPlaceEvent
-import com.masterhaxixu.util.RegionUtils
-import com.masterhaxixu.util.StringUtils
+import com.masterhaxixu.keys.ShulkerKeys
 import dev.faststats.bukkit.BukkitMetrics
 import dev.faststats.core.Metrics
 
@@ -17,9 +16,7 @@ import dev.faststats.core.Metrics
 class Main : SuspendingJavaPlugin() {
     lateinit var database: DatabaseHandler
         private set
-    lateinit var regionUtils: RegionUtils
-        private set
-    lateinit var stringUtils: StringUtils
+    lateinit var keys: ShulkerKeys
         private set
 
     private val metrics: Metrics? = BukkitMetrics.factory()
@@ -32,8 +29,7 @@ class Main : SuspendingJavaPlugin() {
         config.options().copyDefaults(true)
         saveConfig()
         database = DatabaseHandler(this)
-        regionUtils = RegionUtils(this)
-        stringUtils = StringUtils()
+        keys = ShulkerKeys(this)
         metrics?.ready()
         database.connect()
         server.pluginManager.registerSuspendingEvents(ShulkerPlaceEvent(this), this)

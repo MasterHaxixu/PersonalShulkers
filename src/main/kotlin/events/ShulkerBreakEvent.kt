@@ -1,7 +1,6 @@
 package com.masterhaxixu.events
 
 import com.masterhaxixu.Main
-import org.bukkit.NamespacedKey
 import org.bukkit.Tag
 import org.bukkit.block.ShulkerBox
 import org.bukkit.event.EventHandler
@@ -18,28 +17,25 @@ class ShulkerBreakEvent(private val plugin: Main) : Listener {
         if (!Tag.SHULKER_BOXES.isTagged(event.block.type)) return
 
         val shulker = event.block.state as ShulkerBox
-        val ownerKey = NamespacedKey(plugin, "personalshulkers_owner_uuid")
-        val uniqueKey = NamespacedKey(plugin, "personalshulkers_unique_shulker_key")
-
-        val ownerString = shulker.persistentDataContainer.get(ownerKey, PersistentDataType.STRING) ?: return
-        val shulkerKey = shulker.persistentDataContainer.get(uniqueKey, PersistentDataType.STRING) ?: return
+        val ownerString = shulker.persistentDataContainer.get(plugin.keys.ownerKey, PersistentDataType.STRING) ?: return
+        val shulkerKey = shulker.persistentDataContainer.get(plugin.keys.uniqueKey, PersistentDataType.STRING) ?: return
 
         if (!plugin.database.getShulker(shulkerKey)) {
-            shulker.persistentDataContainer.remove(uniqueKey)
-            shulker.persistentDataContainer.remove(ownerKey)
+            shulker.persistentDataContainer.remove(plugin.keys.uniqueKey)
+            shulker.persistentDataContainer.remove(plugin.keys.ownerKey)
             shulker.update()
             return
         }
 
         if (UUID.fromString(ownerString) != event.player.uniqueId && !event.player.hasPermission("personalshulkers.bypass")) {
             event.isCancelled = true
-            plugin.stringUtils.sendMessage(event.player, plugin.config.getString("messages.breakMessage")!!)
+            event.player.sendRichMessage(plugin.config.getString("messages.breakMessage")!!)
             return
         }
 
         plugin.database.removeShulker(shulkerKey)
-        shulker.persistentDataContainer.remove(uniqueKey)
-        shulker.persistentDataContainer.remove(ownerKey)
+        shulker.persistentDataContainer.remove(plugin.keys.uniqueKey)
+        shulker.persistentDataContainer.remove(plugin.keys.ownerKey)
         shulker.update()
     }
 

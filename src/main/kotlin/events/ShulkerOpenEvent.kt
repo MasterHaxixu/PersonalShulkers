@@ -1,7 +1,6 @@
 package com.masterhaxixu.events
 
 import com.masterhaxixu.Main
-import org.bukkit.NamespacedKey
 import org.bukkit.block.ShulkerBox
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -16,16 +15,13 @@ class ShulkerOpenEvent(private val plugin: Main) : Listener {
         if (event.clickedBlock == null) return
         if (event.clickedBlock?.state !is ShulkerBox || !event.action.isRightClick) return
         val shulker = event.clickedBlock!!.state as ShulkerBox
-        val ownerKey = NamespacedKey(plugin, "personalshulkers_owner_uuid")
-        val uniqueKey = NamespacedKey(plugin, "personalshulkers_unique_shulker_key")
-
-        val ownerString = shulker.persistentDataContainer.get(ownerKey, PersistentDataType.STRING) ?: return
-        val shulkerKey = shulker.persistentDataContainer.get(uniqueKey, PersistentDataType.STRING) ?: return
+        val ownerString = shulker.persistentDataContainer.get(plugin.keys.ownerKey, PersistentDataType.STRING) ?: return
+        val shulkerKey = shulker.persistentDataContainer.get(plugin.keys.uniqueKey, PersistentDataType.STRING) ?: return
 
 
         if (!plugin.database.getShulker(shulkerKey)) {
-            shulker.persistentDataContainer.remove(uniqueKey)
-            shulker.persistentDataContainer.remove(ownerKey)
+            shulker.persistentDataContainer.remove(plugin.keys.uniqueKey)
+            shulker.persistentDataContainer.remove(plugin.keys.ownerKey)
             shulker.update()
             return
         }
@@ -33,7 +29,7 @@ class ShulkerOpenEvent(private val plugin: Main) : Listener {
 
         if (UUID.fromString(ownerString) != event.player.uniqueId && !event.player.hasPermission("personalshulkers.bypass")) {
             event.isCancelled = true
-            plugin.stringUtils.sendMessage(event.player, plugin.config.getString("messages.openMessage")!!)
+            event.player.sendRichMessage(plugin.config.getString("messages.openMessage")!!)
         }
     }
 }
